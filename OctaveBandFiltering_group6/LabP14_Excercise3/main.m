@@ -68,7 +68,7 @@ yline(max(abs(hf))/2);
 
 % Plot 
 figure(3)
-plot()
+% plot()
 
 %% 3.2b) 
 % Use the stem function to place vertical markers at several points
