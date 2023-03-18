@@ -81,18 +81,17 @@ hf2 = fftshift(hf2);
 
 % Plot BPF with L = 20
 figure(2)
-title('Frequency response of BPF with w_c = 0.4\pi with L = 20')
 clf
 subplot(2,1,1)
-plot(w1,abs(hf1))       % Magnitude
+plot(w1,abs(hf1))               % Magnitude
 title('|H(e^{jw})|')
 subtitle('w_c = 0.4\pi and L = 20')
 xlabel('Frequency (radians)')
 hold on
-yline(0.5)              % Create measure line to measure bandwidth
+yline(0.5)                      % Create measure line to measure bandwidth
 hold off
 subplot(2,1,2)
-plot(w1,angle(hf1)*180/pi)     % Phase
+plot(w1,angle(hf1)*180/pi)      % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -102,18 +101,17 @@ ylabel('Phase (degrees)')
 
 % Plot BPF with L = 80
 figure(3)
-title('Frequency response of BPF with w_c = 0.4\pi with L = 80')
 clf
 subplot(2,1,1)
-plot(w2,abs(hf2))       % Magnitude
+plot(w2,abs(hf2))               % Magnitude
 title('|H(e^{jw})|')
 subtitle('w_c = 0.4\pi and L = 80')
 xlabel('Frequency (radians)')
 hold on
-yline(0.5)              % Create measure line to measure bandwidth
+yline(0.5)                      % Create measure line to measure bandwidth
 hold off
 subplot(2,1,2)
-plot(w2,angle(hf2)*180/pi)     % Phase
+plot(w2,angle(hf2)*180/pi)      % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -126,6 +124,41 @@ ylabel('Phase (degrees)')
 % halved and vice versa.
 
 %% 4.2a)
+
+% Define initial values
+wc = 0.25*pi;
+L = 41;
+n = linspace(0,L-1,L);  % Vector n (defined as 0<=n<L)
+
+% Calculate Hamming bandpass filter
+hh = (0.54-0.46.*cos(2.*pi.*n./(L-1))).*cos(wc.*(n-(L-1)./2));
+
+% Calculate fft
+hhf = fft(hh,L);
+
+% Perform fftshift
+hhf = fftshift(hhf);
+
+% Create frequency vector
+w = linspace(-pi,pi,L);
+
+% Plot magnitude and phase
+figure(4)
+clf
+subplot(2,1,1)
+plot(w,abs(hhf))               % Magnitude
+title('|H(e^{jw})|')
+xlabel('Frequency (radians)')
+subplot(2,1,2)
+plot(w,angle(hhf))
+title('Phase')
+xlabel('Frequency (radians)')
+ylabel('Phase (degrees)')
+
+% Create vector with the frequencies of interest
+wi = [0 0.1*pi 0.25*pi 0.4*pi 0.5*pi 0.75*pi];
+freqz = 
+
 
 %% 4.2b)
 
