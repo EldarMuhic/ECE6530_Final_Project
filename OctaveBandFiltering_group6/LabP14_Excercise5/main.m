@@ -175,15 +175,50 @@ hf_scaled6 = beta*hf_unscaled;
 % Create frequency vector
 w6 = linspace(-pi,pi,L);
 
-figure(1)
-clf
-plot(w6,abs(hf_scaled6))
+% figure(1)
+% clf
+% plot(w6,abs(hf_scaled6))
 
 %% 5.2c)
+% Plot each of the BPFs on the same plot.
+figure(1)
+clf
+plot(w2((end+1)/2:end),abs(hf_scaled2((end+1)/2:end)),'-x')
+hold on
+plot(w3((end+1)/2:end),abs(hf_scaled3((end+1)/2:end)),'-x')
+plot(w4((end+1)/2:end),abs(hf_scaled4((end+1)/2:end)),'-x')
+plot(w5((end+1)/2:end),abs(hf_scaled5((end+1)/2:end)),'-x')
+plot(w6((end+1)/2:end),abs(hf_scaled6((end+1)/2:end)),'-x')
+title('Frequency Response of BPFs')
+xlabel('\omega (radians)')
+ylabel('Normalized Magnitude')
+xline(center_freq/fs*2*pi,'--')
+yline(0.5,'--b')
+legend('Octave 2','Octave 3','Octave 4','Octave 5','Octave 6','Center Frequencies')
+hold off
+
+% The plot generated here shows the frequency responses of each BPF, the
+% center frequencies of each octave, and the passband level used to
+% determine the width of each filter by modifying L.
 
 %% 5.2d)
+% In determining the width of each BPF by modifying L, there were some
+% sacrifices that had to be made and some assumptions used. In the case of
+% the sacrifices, there were moments when determining L that changing
+% L by 1 would greatly modify the passband and cause it to either shrink or
+% grow greatly on the upper and lower frequency side. In all of these
+% cases, the L was chosen that made the passband more narrow. One of the
+% assumptions that was used heavily was that the notes being passed into
+% the system would exclusively be those within the octaves specified. This
+% assumption was used for the upper and lower BPF octaves, as the passband
+% could cover frequencies outside of the desired frequencies in the lower
+% or upper direction for octaves 2 and 6, respectively.
 
 %% 5.3a)
+% Generate a signal xx with the following characteristics:
+% t = 0   --> 0.25, cos(2pi(220)t)
+% t = 0.3 --> 0.55, cos(2pi(880)t)
+% t = 0.6 --> 0.85, cos(2pi(440)t) + cos(2pi(1760)t)
 
 %% 5.3b)
 
