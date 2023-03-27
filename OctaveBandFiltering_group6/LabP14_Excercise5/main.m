@@ -220,11 +220,58 @@ hold off
 % t = 0.3 --> 0.55, cos(2pi(880)t)
 % t = 0.6 --> 0.85, cos(2pi(440)t) + cos(2pi(1760)t)
 
+% Sampling frequency
+fs = 8000;
+
+% Generate each of the time periods. "n" indicates time where there is no
+% signal.
+t1 = 0:1/fs:0.25-1/fs;
+t2n = 0.25:1/fs:0.3-1/fs;
+t3 = 0.3:1/fs:0.55-1/fs;
+t4n = 0.55:1/fs:0.6-1/fs;
+t5 = 0.6:1/fs:0.85-1/fs;
+
+% Generate each of the individual time period signals.
+x1 = cos(2*pi*220*t1);
+x2n = 0*t2n;
+x3 = cos(2*pi*880*t3);
+x4n = 0*t4n;
+x5 = cos(2*pi*440*t5)+cos(2*pi*1760*t5);
+
+% Concatenate and generate time vector for all periods
+xx = [x1 x2n x3 x4n x5];
+t = linspace(0,0.85-1/fs,.85*fs);
+
+
 %% 5.3b)
+% Filter the signal through each of the five filters.
+yy2 = conv(xx,hf_scaled2);
+yy3 = conv(xx,hf_scaled3);
+yy4 = conv(xx,hf_scaled4);
+yy5 = conv(xx,hf_scaled5);
+yy6 = conv(xx,hf_scaled6);
+
 
 %% 5.3c)
+% Plot each of the five outputs in a single figure
+figure(2)
+clf
+subplot(5,1,1)
+plot(t,abs(yy2))
+subplot(5,1,2)
+plot(t,abs(yy3))
+subplot(5,1,3)
+plot(t,abs(yy4))
+subplot(5,1,4)
+plot(t,abs(yy5))
+subplot(5,1,5)
+plot(t,abs(yy6))
 
 %% 5.3d)
+% Use the frequency responses to validate that the correct magnitude and
+% phase are outputted in each of the three regions.
+
+% 
 
 %% 5.3e)
 
