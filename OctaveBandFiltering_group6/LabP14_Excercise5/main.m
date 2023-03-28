@@ -115,8 +115,8 @@ w3 = linspace(-pi,pi,L3);
 % clf
 % plot(w3,abs(hf_scaled3))
 
-%% Design of BPF for octave 4.
-L4 = 55;                         % Bandwidth = 537.94Hz-225.62Hz
+%% Design of BPF for octave 4. 
+L4 = 67;                         % Bandwidth = DETERMINE NEW BANDWIDTH
 n = linspace(0,L4-1,L4);
 
 % Calculate impulse response
@@ -174,7 +174,7 @@ w5 = linspace(-pi,pi,L5);
 % plot(w5,abs(hf_scaled5))
 
 %% Design of BPF for octave 6.
-L6 = 15;                         % Bandwidth = 2158.1Hz-1031.3Hz
+L6 = 21;                         % Bandwidth = DETERMINE NEW BANDWIDTH
 n = linspace(0,L6-1,L6);
 
 % Calculate impulse response
@@ -364,6 +364,49 @@ ylabel('Amplitude (V)')
 % NOTE: Scores of each octave should be combined into a 5 x N matrix before
 % plugging into autodetect function.
 
+sc2 = octavescore(xx,h_scaled2,fs);
+sc3 = octavescore(xx,h_scaled3,fs);
+sc4 = octavescore(xx,h_scaled4,fs);
+sc5 = octavescore(xx,h_scaled5,fs);
+sc6 = octavescore(xx,h_scaled6,fs);
+
+sc = [sc2;sc3;sc4;sc5;sc6];
+
+notes = autodetect(sc);
+
+% CODE WORKS FOR SIGNAL GENERATED PREVIOUSLY
+
+%% Test code using incrementing notes (every other note).
+
+ttest = 0:1/fs:0.2-1/fs;
+
+test_notes = zeros(1,35);
+
+for i = 0:34
+    test_notes(i+1) = lower_freq(1)*2^(2*i/12);
+end
+
+test_signal = zeros(1,length(ttest)*35);
+test_signal(1:length(ttest)) = cos(2*pi*test_notes(1)*ttest);
+
+for i = 2:35
+    test_signal(i*length(ttest)+1:(i+1)*length(ttest)) = cos(2*pi*test_notes(i)*ttest);
+end
+
+sc2test = octavescore(test_signal,h_scaled2,fs);
+sc3test = octavescore(test_signal,h_scaled3,fs);
+sc4test = octavescore(test_signal,h_scaled4,fs);
+sc5test = octavescore(test_signal,h_scaled5,fs);
+sc6test = octavescore(test_signal,h_scaled6,fs);
+
+sctest = [sc2test;sc3test;sc4test;sc5test;sc6test];
+
+notestest = autodetect(sctest);
+
+% Test works pretty well. From what I can tell in the lab instructions it's
+% not supposed to work perfectly and we're supposed to give an error rate.
+
+
 %% Functions
 
 function sc = octavescore(xx, hh, fs)
@@ -402,7 +445,7 @@ for j = 1:i
 
     % Adjust yy for transient at beginning due to Hamming BPF
     % start-up delay.
-    yy = yy(L:end);
+    yy = yy((L-1)/2:end);
     sc(j) = max(yy);
 
 end
@@ -418,10 +461,17 @@ function notes = autodetect(sc)
 % or zero whether there are notes in each octave present within that 50 ms
 % segment.
 
-if sc >= 0.5
-    notes = 1;
-else 
-    notes = 0;
+notes = zeros(5,length(sc));
+
+for i = 1:5
+    for j = 1:length(sc)
+        if abs(sc(i,j)) >= 0.5
+            notes(i,j) = 1;
+        else 
+            notes(i,j) = 0;
+        end
+
+    end
 end
 
 end
