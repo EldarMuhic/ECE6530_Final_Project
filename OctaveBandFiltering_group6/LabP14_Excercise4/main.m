@@ -26,13 +26,13 @@ w = linspace(-pi,pi,L);
 figure(1)
 clf
 subplot(2,1,1)
-plot(w,abs(hf))       % Magnitude
+plot(w,abs(hf))                 % Magnitude
 title('|H(e^{jw})|)')
 subtitle('w_c = 0.4\pi and L = 40')
 xlabel('Frequency (radians)')
 ylabel('Magnitude')
 subplot(2,1,2)
-plot(w,angle(hf)*180/pi)     % Phase
+plot(w,angle(hf)*180/pi)        % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -87,6 +87,7 @@ plot(w1,abs(hf1))               % Magnitude
 title('|H(e^{jw})|')
 subtitle('w_c = 0.4\pi and L = 20')
 xlabel('Frequency (radians)')
+ylabel('Magnitude')
 hold on
 yline(0.5)                      % Create measure line to measure bandwidth
 hold off
@@ -107,6 +108,7 @@ plot(w2,abs(hf2))               % Magnitude
 title('|H(e^{jw})|')
 subtitle('w_c = 0.4\pi and L = 80')
 xlabel('Frequency (radians)')
+ylabel('Magnitude')
 hold on
 yline(0.5)                      % Create measure line to measure bandwidth
 hold off
@@ -149,19 +151,136 @@ subplot(2,1,1)
 plot(w,abs(hhf))               % Magnitude
 title('|H(e^{jw})|')
 xlabel('Frequency (radians)')
+ylabel('Magnitude')
 subplot(2,1,2)
-plot(w,angle(hhf))
+plot(w,angle(hhf))             % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
 
 % Create vector with the frequencies of interest
-wi = [0 0.1*pi 0.25*pi 0.4*pi 0.5*pi 0.75*pi];
-freqz = 
+wi = [0; 0.1*pi; 0.25*pi; 0.4*pi; 0.5*pi; 0.75*pi;];
 
+%ind = zeros(length(wi));
+mag = zeros(length(wi), 1);
+phase = zeros(length(wi), 1);
 
+for i = 1:length(wi) 
+    ind = find(w == wi(i));
+    mag(i) = abs(hhf(ind));
+    phase(i) = angle(hhf(ind));
+end 
+
+table(wi, mag, phase)
 %% 4.2b)
+
+% Look at magnitude plot, and plot a line at 0.5 to determine bandwidth of
+% passband.
+subplot(2,1,1)
+hold on
+yline(0.5 * max(abs(hhf)));
+hold off
+
+% Pass band interects at w = 0.665 and 0.955. Bandwidth is then
+% 0.29 radians.
+
+% L = 21 
+% Define initial values
+L = 21;
+n = linspace(0,L-1,L);  % Vector n (defined as 0<=n<L)
+
+% Calculate Hamming bandpass filter
+hh = (0.54-0.46.*cos(2.*pi.*n./(L-1))).*cos(wc.*(n-(L-1)./2));
+
+% Calculate fft
+hhf_L21 = fft(hh,L);
+
+% Perform fftshift
+hhf_L21 = fftshift(hhf_L21);
+
+% Create frequency vector
+w = linspace(-pi,pi,L);
+
+% Plot magnitude and phase
+figure(5)
+clf
+subplot(2,1,1)
+plot(w,abs(hhf_L21))               % Magnitude
+title('|H(e^{jw})|')
+subtitle('L = 21')
+xlabel('Frequency (radians)')
+subplot(2,1,2)
+plot(w,angle(hhf_L21))             % Phase
+title('Phase')
+xlabel('Frequency (radians)')
+ylabel('Phase (degrees)')
+
+subplot(2,1,1)
+hold on
+yline(0.5 * max(abs(hhf_L21)));
+hold off
+
+% Pass band interects at w = 0.484 and 1.1484. Bandwidth is then
+% 0.6644 radians.
+
+% L = 81 
+% Define initial values
+L = 81;
+n = linspace(0,L-1,L);  % Vector n (defined as 0<=n<L)
+
+% Calculate Hamming bandpass filter
+hh = (0.54-0.46.*cos(2.*pi.*n./(L-1))).*cos(wc.*(n-(L-1)./2));
+
+% Calculate fft
+hhf_L81 = fft(hh,L);
+
+% Perform fftshift
+hhf_L81 = fftshift(hhf_L81);
+
+% Create frequency vector
+w = linspace(-pi,pi,L);
+
+% Plot magnitude and phase
+figure(6)
+clf
+subplot(2,1,1)
+plot(w,abs(hhf_L81))               % Magnitude
+title('|H(e^{jw})|')
+subtitle('L = 81')
+xlabel('Frequency (radians)')
+subplot(2,1,2)
+plot(w,angle(hhf_L81))             % Phase
+title('Phase')
+xlabel('Frequency (radians)')
+ylabel('Phase (degrees)')
+
+subplot(2,1,1)
+hold on
+yline(0.5 * max(abs(hhf_L81)));
+hold off
+
+% Pass band interects at w = 0.72575 and 0.86965. Bandwidth is then
+% 0.1439 radians.
+
+% When L is halved, the bandwidth increases, but when L is doubled, the 
+% bandwidth is decreased. 
 
 %% 4.2c)
 
+% x[n] = 2 + 2cos(0.1*pi*n+pi/3) + cos(0.25*pi*n - pi/3)
+% w = [0 , 0.1*pi, 0.25*pi]
+% mag = [0.08, 0.077701, 10.733]
+% phase = [3.1416, -2.9883, -2.7585]
+% 
+% y[n] = (2*0.08) + (2*0.077701)cos(0.1*pi*n+pi/3 - 2.9883) + 
+%        (1*10.733)cos(0.25*pi*n - pi/3 - 2.7585)
+% y[n] = 0.16 + (0.1554)cos(0.1*pi*n+pi/3 - 2.9883) + 
+%        (10.7330)cos(0.25*pi*n - pi/3 - 2.7585)
+% 
+% 10.7330 is in the passband, while 0.16 and 0.1554 are in the stopband. 
+
 %% 4.2d)
+% The filter is be able to pass the componenets at w = 0.25*pi. This is 
+% because the amplitudes are in the passband, while the others are in the 
+% stop band which means that that the amplitudes are small enough to be
+% neglected. 
