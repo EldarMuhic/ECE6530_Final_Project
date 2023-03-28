@@ -406,6 +406,23 @@ notestest = autodetect(sctest);
 % Test works pretty well. From what I can tell in the lab instructions it's
 % not supposed to work perfectly and we're supposed to give an error rate.
 
+%% 5.4.1 Testing
+
+labtest = load("labtest.mat");
+
+xxtest = labtest.xx;
+
+sc2t = octavescore(xxtest,h_scaled2,fs);
+sc3t = octavescore(xxtest,h_scaled3,fs);
+sc4t = octavescore(xxtest,h_scaled4,fs);
+sc5t = octavescore(xxtest,h_scaled5,fs);
+sc6t = octavescore(xxtest,h_scaled6,fs);
+
+sct = [sc2t;sc3t;sc4t;sc5t;sc6t];
+
+notes_t = autodetect(sct);
+
+% Need to do analysis to see what the error percentage is.
 
 %% Functions
 
@@ -431,6 +448,7 @@ L = length(hh);
 
 % Calculate number of segments
 i = length(xx)/seg;
+i = floor(i);           % Make sure i is an integer
 
 % Initialize sc vector based on number of segments
 sc = zeros(1,i);
