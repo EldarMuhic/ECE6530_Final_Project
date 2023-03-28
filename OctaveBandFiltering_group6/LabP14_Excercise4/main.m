@@ -26,13 +26,13 @@ w = linspace(-pi,pi,L);
 figure(1)
 clf
 subplot(2,1,1)
-plot(w,abs(hf))       % Magnitude
+plot(w,abs(hf))                 % Magnitude
 title('|H(e^{jw})|)')
 subtitle('w_c = 0.4\pi and L = 40')
 xlabel('Frequency (radians)')
 ylabel('Magnitude')
 subplot(2,1,2)
-plot(w,angle(hf)*180/pi)     % Phase
+plot(w,angle(hf)*180/pi)        % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -87,6 +87,7 @@ plot(w1,abs(hf1))               % Magnitude
 title('|H(e^{jw})|')
 subtitle('w_c = 0.4\pi and L = 20')
 xlabel('Frequency (radians)')
+ylabel('Magnitude')
 hold on
 yline(0.5)                      % Create measure line to measure bandwidth
 hold off
@@ -107,6 +108,7 @@ plot(w2,abs(hf2))               % Magnitude
 title('|H(e^{jw})|')
 subtitle('w_c = 0.4\pi and L = 80')
 xlabel('Frequency (radians)')
+ylabel('Magnitude')
 hold on
 yline(0.5)                      % Create measure line to measure bandwidth
 hold off
@@ -149,8 +151,9 @@ subplot(2,1,1)
 plot(w,abs(hhf))               % Magnitude
 title('|H(e^{jw})|')
 xlabel('Frequency (radians)')
+ylabel('Magnitude')
 subplot(2,1,2)
-plot(w,angle(hhf))
+plot(w,angle(hhf))             % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -207,7 +210,7 @@ title('|H(e^{jw})|')
 subtitle('L = 21')
 xlabel('Frequency (radians)')
 subplot(2,1,2)
-plot(w,angle(hhf_L21))
+plot(w,angle(hhf_L21))             % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -246,7 +249,7 @@ title('|H(e^{jw})|')
 subtitle('L = 81')
 xlabel('Frequency (radians)')
 subplot(2,1,2)
-plot(w,angle(hhf_L81))
+plot(w,angle(hhf_L81))             % Phase
 title('Phase')
 xlabel('Frequency (radians)')
 ylabel('Phase (degrees)')
@@ -279,5 +282,5 @@ hold off
 %% 4.2d)
 % The filter is be able to pass the componenets at w = 0.25*pi. This is 
 % because the amplitudes are in the passband, while the others are in the 
-% stop band which means that that the amplitudes are small enough to
+% stop band which means that that the amplitudes are small enough to be
 % neglected. 
