@@ -182,7 +182,7 @@ yline(0.5 * max(abs(hhf)));
 hold off
 
 % Pass band interects at w = 0.665 and 0.955. Bandwidth is then
-% 0.29 radians.
+% 0.29 radians, and the passband ranges from .212pi to .304pi.
 
 % L = 21 
 % Define initial values
@@ -221,7 +221,7 @@ yline(0.5 * max(abs(hhf_L21)));
 hold off
 
 % Pass band interects at w = 0.484 and 1.1484. Bandwidth is then
-% 0.6644 radians.
+% 0.6644 radians, and the passband ranges from .154pi to .366pi.
 
 % L = 81 
 % Define initial values
@@ -260,27 +260,45 @@ yline(0.5 * max(abs(hhf_L81)));
 hold off
 
 % Pass band interects at w = 0.72575 and 0.86965. Bandwidth is then
-% 0.1439 radians.
+% 0.1439 radians, and the passband ranges from .231pi to .2768pi.
 
 % When L is halved, the bandwidth increases, but when L is doubled, the 
-% bandwidth is decreased. 
+% bandwidth decreases. 
 
 %% 4.2c)
-
 % x[n] = 2 + 2cos(0.1*pi*n+pi/3) + cos(0.25*pi*n - pi/3)
+% Breaking down x[n], we have the following frequencies and phases in the 
+% individual parts of the signal.
+
+% Frequency (radians)
 % w = [0 , 0.1*pi, 0.25*pi]
+% phase = [0, pi/3, -pi/3]
+
+% Looking at the magnitude and phase of the impulse response of the BPF at 
+% those specific frequencies, we have:
 % mag = [0.08, 0.077701, 10.733]
 % phase = [3.1416, -2.9883, -2.7585]
-% 
+
+% We can then use these coefficients and phases to determine what the 
+% output y[n] would be where y[n] is the convolution of x[n] and hh[n] 
+% through multiplication of the magnitudes and addition of the phases.
 % y[n] = (2*0.08) + (2*0.077701)cos(0.1*pi*n+pi/3 - 2.9883) + 
 %        (1*10.733)cos(0.25*pi*n - pi/3 - 2.7585)
+
+% The above gives us:
 % y[n] = 0.16 + (0.1554)cos(0.1*pi*n+pi/3 - 2.9883) + 
 %        (10.7330)cos(0.25*pi*n - pi/3 - 2.7585)
-% 
-% 10.7330 is in the passband, while 0.16 and 0.1554 are in the stopband. 
+
+% Amplitudes are three signal components are 0.16 for w = 0, 0.1554 for w =
+% 0.1*pi, and 10.733 for w = 0.25*pi. The amplitude of 10.733 indicates
+% that this frequency is within the passband while the others are within
+% the stopband of the filter.
 
 %% 4.2d)
-% The filter is be able to pass the componenets at w = 0.25*pi. This is 
-% because the amplitudes are in the passband, while the others are in the 
-% stop band which means that that the amplitudes are small enough to be
-% neglected. 
+% This filter has an impulse response that centers on +-0.25*pi and the
+% length of the filter determines the bandwidth of the passband. When the
+% length of the filter is 41, the passband ranges from .211pi to .304pi and
+% -.211pi to -.304pi.
+% This indicates that signal components that have frequencies within this
+% range will be able to pass through the filter, while those that are
+% outside of this frequency range will be reduced/rejected.
